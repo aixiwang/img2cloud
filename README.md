@@ -1,5 +1,5 @@
 # img2cloud
-A demo application to capture image from USB camera and upload image to Aliyun OSS and Baidu OSS service.
+A demo application to capture image from USB camera and upload image to Aliyun OSS and Baidu BOS service.
 
 please install packages:
 
