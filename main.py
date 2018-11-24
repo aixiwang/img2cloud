@@ -37,22 +37,18 @@ P4_FILE = './img/P4_%%.jpg'
 ERR_FILE = './img/err_%%.jpg'
 
 TASK_DURATION = 60
-
-
     
 #====================================
 # main  
 #====================================
 if __name__ == "__main__":
     retcode,config_json = utils.gen_config()
-    print 'mask_jon:',config_json
-    
+    print 'mask_jon:',config_json 
     
     while True:
+        print('---------------------------------------------------------------')
         t1 = time.time()
         f1 = utils.gen_filename(INPUT_FILE,t1)
-
-
 
         duration = config_json['duration']
         

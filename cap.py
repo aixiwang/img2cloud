@@ -16,40 +16,55 @@
 from PIL import Image
 import select
 import v4l2capture
-
+import time
+import os
 
 def cap(f,w,h):
-    try:
-        # Open the video device.
-        video = v4l2capture.Video_device("/dev/video0")
+    i = 0
+    while i < 10:
+        try:
 
-        # Suggest an image size to the device. The device may choose and
-        # return another size if it doesn't support the suggested one.
-        size_x, size_y = video.set_format(640, 480)
-
-        # Create a buffer to store image data in. This must be done before
-        # calling 'start' if v4l2capture is compiled with libv4l2. Otherwise
-        # raises IOError.
-        video.create_buffers(1)
-
-        # Send the buffer to the device. Some devices require this to be done
-        # before calling 'start'.
-        video.queue_all_buffers()
-
-        # Start the device. This lights the LED if it's a camera that has one.
-        video.start()
-
-        # Wait for the device to fill the buffer.
-        select.select((video,), (), ())
-
-        # The rest is easy :-)
-        image_data = video.read()
-        video.close()
-        image = Image.frombytes("RGB", (size_x, size_y), image_data)
-        image.save(f)
-        print "Saved ",f,"(Size: " + str(size_x) + " x " + str(size_y) + ")"
-        
-        return 0,size_x,size_y
-    except Exception as e:
-        print 'exception:',str(e)
-        return -1,0,0
+            video = v4l2capture.Video_device("/dev/video0")
+            size_x, size_y = video.set_format(640, 480)
+            video.create_buffers(1)
+            video.queue_all_buffers()
+            video.start()
+            select.select((video,), (), ())
+            image_data = video.read()
+            video.close()
+            image = Image.frombytes("RGB", (size_x, size_y), image_data)
+            image.save(f)
+            print "Saved ",f,"(Size: " + str(size_x) + " x " + str(size_y) + ")"
+            return 0,size_x,size_y
+            
+        except Exception as e:
+            print 'exception:',str(e)
+            try:
+                os.system('rm usb.txt')            
+                os.system('lsusb > usb.txt')
+                f = open('usb.txt','rb')
+                s = f.read()
+                f.close()
+                s2 = s.split('\n')
+                #print(s2)
+                for d in s2:
+                    #print d
+                    if d.find('Sunplus') > 0:
+                        s3 = d.split(' ')
+                        bus_cam = s3[1][0:3]
+                        dev_cam = s3[3][0:3]
+                        
+                        #print('cam Bus:',bus_cam)
+                        #print('cam Dev:',dev_cam)
+                        reset_cmd = './reset /dev/bus/usb/' + bus_cam + '/' + dev_cam
+                        #print('reset_cmd:',reset_cmd)
+                
+                os.system(reset_cmd)
+                print('reset usb cam:',reset_cmd)
+                time.sleep(3)
+            except:
+                print('try to reset camera to recovery')
+                
+            i += 1
+            
+    return -1,0,0

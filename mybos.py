@@ -50,24 +50,26 @@ def _random_string(length):
 def file_upload_bos(config,local_filename):
     try:
         bucket_name = config['bucket_name']
+        bucket_name = str(bucket_name)
+        
         #p = config['dir']
         AK = config['AK']
         SK = config['SK']
         HOST = config['HOST']
     
-        print('step 1')
-        print('file name:',local_filename)
+        #print('step 1')
+        #print('file name:',local_filename)
         bos_config = BceClientConfiguration(credentials=BceCredentials(str(AK), str(SK)),endpoint=str(HOST))
         bos_client = BosClient(bos_config)
 
-        print('step 2')
-        print 'bucket_name:',bucket_name,type(bucket_name)
+        #print('step 2')
+        #print 'bucket_name:',bucket_name,type(bucket_name)
         if not bos_client.does_bucket_exist(bucket_name):
             bos_client.create_bucket(bucket_name)
 
-        print('step 3')            
+        #print('step 3')            
         key = str(local_filename.split('/')[-1])
-        print('key:',key)
+        #print('key:',key)
         bos_client.put_object_from_file(bucket_name, str(key), str(local_filename))
         print(local_filename + ' has been uploaded to bucket:' + bucket_name)
         return 0
