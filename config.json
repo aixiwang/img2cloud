@@ -1,7 +1,18 @@
 {
- "duration": 30,
- "access_key_id": "xxx",
- "access_key_secret": "yyy",
- "bucket_name": "pm25-sensor-img",
- "endpoint": "https://oss-cn-hangzhou.aliyuncs.com"
+ "duration":60,
+ "cloud":"bos",
+ "oss": {
+     "duration": 30,
+     "access_key_id": "xxx",
+     "access_key_secret": "yyy",
+     "bucket_name": "pm25-sensor-img",
+     "endpoint": "https://oss-cn-hangzhou.aliyuncs.com"
+    },
+  "bos": {
+     "bucket_name":"f3",
+     "HOST":"door888.su.bcebos.com",
+     "AK":"xxx",
+     "SK":"xxx"  
+  }
+  
 }

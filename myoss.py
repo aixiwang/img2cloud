@@ -7,8 +7,9 @@ import oss2
 #---------------------------
 # upload_file_to_oss
 #---------------------------
-def upload_file_to_oss(config,oss_filename, local_filename):
+def upload_file_to_oss(config,local_filename):
     try:
+        oss_filename = local_filename.split('/')[-1]
         access_key_id = config['access_key_id']
         access_key_secret = config['access_key_secret']
         bucket_name = config['bucket_name']

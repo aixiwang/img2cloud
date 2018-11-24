@@ -5,8 +5,7 @@
 #
 #=========================================================
 
-import cv2
-import numpy as np
+
 import sys
 import os.path
 import os
@@ -14,7 +13,7 @@ import os
 import time
 import utils
 import myoss
-
+import mybos
 
 import cap as cap
 
@@ -46,15 +45,15 @@ TASK_DURATION = 60
 #====================================
 if __name__ == "__main__":
     retcode,config_json = utils.gen_config()
+    print 'mask_jon:',config_json
+    
+    
     while True:
         t1 = time.time()
         f1 = utils.gen_filename(INPUT_FILE,t1)
 
 
-        #
-        # init local config values
-        #
-        print 'mask_jon:',config_json
+
         duration = config_json['duration']
         
         # create folder for img storing
@@ -67,8 +66,17 @@ if __name__ == "__main__":
         if ret == -1:
             print 'capture image fail!'
         else:
-            # upload file ...
-            retcode = myoss.upload_file_to_oss(config_json,f1.split('/')[-1],f1)
+            retcode = 0
+            
+            if config_json['cloud'] == 'oss':
+                # upload file ...
+                retcode = myoss.upload_file_to_oss(config_json['oss'],f1)
+                
+            elif config_json['cloud'] == 'bos':
+                retcode = mybos.file_upload_bos(config_json['bos'],f1)
+            else:
+                print('no cloud defined, no file uploaded')
+                
             print 'upload retcode:',retcode
             
         while (time.time() - t1) < duration:
