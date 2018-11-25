@@ -4,8 +4,9 @@ A demo application to capture image from USB camera and upload image to Aliyun O
 please install packages:
 
 https://github.com/aliyun/aliyun-oss-python-sdk
+
 https://github.com/gebart/python-v4l2capture
 
-pip install PIL
+pip install Pillow
 
 Please put configuration information in config.json
