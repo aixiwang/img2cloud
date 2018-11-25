@@ -38,11 +38,8 @@ ERR_FILE = './img/err_%%.jpg'
 
 TASK_DURATION = 60
     
-#====================================
-# main  
-#====================================
-if __name__ == "__main__":
-    retcode,config_json = utils.gen_config()
+def main_loop(config_file):
+    retcode,config_json = utils.gen_config(config_file)
     print 'mask_jon:',config_json 
     
     while True:
@@ -77,3 +74,9 @@ if __name__ == "__main__":
             
         while (time.time() - t1) < duration:
             time.sleep(1)
+            
+#====================================
+# main  
+#====================================
+if __name__ == "__main__":
+    main_loop('config.json')

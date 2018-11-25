@@ -1,17 +1,4 @@
 #!/usr/bin/python
-#
-# please install python-v4l2capture
-#
-# This file is an example on how to capture a picture with
-# python-v4l2capture.
-#
-# 2009, 2010 Fredrik Portstrom
-#
-# I, the copyright holder of this file, hereby release it into the
-# public domain. This applies worldwide. In case this is not legally
-# possible: I grant anyone the right to use this work for any
-# purpose, without any conditions, unless such conditions are
-# required by law.
 
 from PIL import Image
 import select
@@ -25,26 +12,45 @@ def cap(f,w,h):
         try:
 
             video = v4l2capture.Video_device("/dev/video0")
+            #size_x, size_y = video.set_format(640, 480,fourcc = 'MJPG')
             size_x, size_y = video.set_format(640, 480)
+            video.set_fps(1)
             video.create_buffers(1)
             video.queue_all_buffers()
             video.start()
+            
+            print('cap 1')
+            #time.sleep(1)
             select.select((video,), (), ())
+            print('cap 2')
+            #image_data = video.read_and_queue()
             image_data = video.read()
             video.close()
+            print('cap 3')
             image = Image.frombytes("RGB", (size_x, size_y), image_data)
             image.save(f)
+            #f = open(f,'wb')
+            #f.write(image_data)
+            print('cap 4')
             print "Saved ",f,"(Size: " + str(size_x) + " x " + str(size_y) + ")"
             return 0,size_x,size_y
             
         except Exception as e:
-            print 'exception:',str(e)
+            print 'exception 1:',str(e)
+            
             try:
-                os.system('rm usb.txt')            
+                video.close()
+            except Exception as e:
+                print('exception 2',str(e))
+                
+
+            try:
+                print('try to reset camera to recovery')            
+                #os.system('rm usb.txt')            
                 os.system('lsusb > usb.txt')
-                f = open('usb.txt','rb')
-                s = f.read()
-                f.close()
+                f2 = open('usb.txt','rb')
+                s = f2.read()
+                f2.close()
                 s2 = s.split('\n')
                 #print(s2)
                 for d in s2:
@@ -61,9 +67,11 @@ def cap(f,w,h):
                 
                 os.system(reset_cmd)
                 print('reset usb cam:',reset_cmd)
-                time.sleep(3)
-            except:
-                print('try to reset camera to recovery')
+                #time.sleep(3)
+            except Exception as e:
+                print('exception 3',str(e))
+
+
                 
             i += 1
             

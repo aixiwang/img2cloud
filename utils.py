@@ -22,12 +22,12 @@ img = None
 #----------------------
 # gen_config
 #----------------------
-def gen_config():
+def gen_config(config_file):
     mask_json = {}
     
-    if os.path.exists('config.json'):
+    if os.path.exists(config_file):
         try:
-            f = open('config.json','rb')
+            f = open(config_file,'rb')
             s = f.read()
             mask_json = json.loads(s)
             print 'read mask_json from file config.json'
