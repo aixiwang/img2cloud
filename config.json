@@ -1,5 +1,5 @@
 {
- "duration":10,
+ "duration":60,
  "cloud":"bos",
  "oss": {
      "access_key_id": "xxx",
@@ -10,8 +10,8 @@
   "bos": {
      "bucket_name":"f3",
      "HOST":"door888.su.bcebos.com",
-     "AK":"xxx",
-     "SK":"xxx"     
+     "AK":"bd94372ee",
+     "SK":"cd7fd1ec7"     
   }
   
 }
